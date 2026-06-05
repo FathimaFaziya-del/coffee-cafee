@@ -47,6 +47,7 @@ export interface StoreLocation {
     lng: number;
   };
   features: string[];
+  mapUrl?: string;
 }
 
 export interface Voucher {

@@ -7,15 +7,23 @@ import { MenuItem, StoreLocation, Voucher } from './types';
 
 // Import our generated assets as ES Modules so Vite bundles and hashes them correctly in production
 import coffeeHero from './assets/images/coffee_hero_1780680391059.png';
-import espressoDrink from './assets/images/espresso_drink_1780680410315.png';
-import coffeeBeans from './assets/images/coffee_beans_1780680427052.png';
 import coffeePour from './assets/images/coffee_pour_1780680443701.png';
+import cardamomFlatWhite from './assets/images/cardamom_flat_white_1780684542655.png';
+import saffronNitro from './assets/images/saffron_nitro_brew_1780684568644.png';
+import roseCappuccino from './assets/images/rose_cardamom_cappuccino_1780684587305.png';
+import dateIcedLatte from './assets/images/date_butter_iced_latte_1780684602939.png';
+import yemenHarazBeans from './assets/images/yemen_haraz_beans_bag_1780684620784.png';
+import panamaGeishaBeans from './assets/images/panama_geisha_beans_bag_1780684636957.png';
 
 export const IMAGES = {
   hero: coffeeHero,
-  drink: espressoDrink,
-  beans: coffeeBeans,
-  pour: coffeePour
+  flatWhite: cardamomFlatWhite,
+  pourOver: coffeePour,
+  nitro: saffronNitro,
+  roseCappuccino: roseCappuccino,
+  dateLatte: dateIcedLatte,
+  yemenBeans: yemenHarazBeans,
+  geishaBeans: panamaGeishaBeans,
 };
 
 export const MENU_ITEMS: MenuItem[] = [
@@ -25,7 +33,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Double shot of our signature house ristretto with a delicate dusting of premium green organic cardamom, blanketed with velvet camel milk or organic whole-milk micro-foam.',
     price: 26.00,
     category: 'espresso',
-    image: IMAGES.drink,
+    image: IMAGES.flatWhite,
     roastLevel: 'Medium-Light',
     notes: ['Green Cardamom', 'Sweet Cocoa', 'Toasted Hazelnut'],
     customizationOptions: {
@@ -42,7 +50,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Bespoke hand-poured slow filter. Sourced from the ancient terraced hills of Haraz, Yemen. Delivers outstanding purity with dynamic floral tones.',
     price: 36.00,
     category: 'filter',
-    image: IMAGES.pour,
+    image: IMAGES.pourOver,
     origin: 'Haraz Mountains, Yemen',
     roastLevel: 'Light',
     notes: ['Jasmine Florals', 'Wild Honey', 'Red Currant'],
@@ -58,7 +66,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Premium slow-steeped cold brew infused with organic saffron threads and nitrogen gas on tap for a velvety, creamy crown and luxurious spice finish.',
     price: 29.00,
     category: 'cold_craft',
-    image: IMAGES.pour,
+    image: IMAGES.nitro,
     roastLevel: 'Medium-Dark',
     notes: ['Pure Saffron', 'Dark Chocolate', 'Warm Creamy Finish'],
     customizationOptions: {
@@ -72,7 +80,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ultra-rare whole roasted micro-lot beans. Hand-harvested in high elevations, naturally sun-dried on vintage rooftop beds, bringing sublime complex fruit sweetness.',
     price: 135.00,
     category: 'beans',
-    image: IMAGES.beans,
+    image: IMAGES.yemenBeans,
     origin: 'Haraz Highlands, Yemen',
     roastLevel: 'Light',
     notes: ['Blackberry Jam', 'Saffron Threads', 'Warm Bergamot']
@@ -83,7 +91,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'The world\'s most prized floral profile. Sourced directly from Hacienda La Esmeralda. Complex jasmine florality meets sparkling clean processing.',
     price: 185.00,
     category: 'beans',
-    image: IMAGES.beans,
+    image: IMAGES.geishaBeans,
     origin: 'Boquete, Panama',
     roastLevel: 'Light',
     notes: ['Jasmine Tea', 'Orange Blossom', 'Sweet Peach']
@@ -94,7 +102,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Espresso blanketed with rich, tight micro-foam touched with double-distilled Lebanese rose water and a pinch of hand-ground Emirati cardamom.',
     price: 28.00,
     category: 'espresso',
-    image: IMAGES.drink,
+    image: IMAGES.roseCappuccino,
     roastLevel: 'Medium',
     notes: ['Damascene Rose', 'Spiced Pods', 'Sweet Buttercream'],
     customizationOptions: {
@@ -111,7 +119,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Artisanal ristretto extraction combined with fresh chilled farm milk, integrated organic Khalas date honey syrup, and premium pecan praline dust.',
     price: 32.00,
     category: 'cold_craft',
-    image: IMAGES.drink,
+    image: IMAGES.dateLatte,
     roastLevel: 'Medium-Light',
     notes: ['Khalas Date Nectar', 'Caramelized Pecan', 'Sweet Cream'],
     customizationOptions: {
@@ -131,8 +139,9 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     city: 'Dubai, UAE',
     phone: '+971 (4) 388-1920',
     hours: '08:00 AM - 12:00 AM',
-    coordinates: { lat: 37.7915, lng: -122.4018 },
-    features: ['Yemeni Slow Bar', 'Custom Micro-Batches', 'Private Majlis Pods', 'Complementary Valet Parking']
+    coordinates: { lat: 25.2185, lng: 55.2533 },
+    features: ['Yemeni Slow Bar', 'Custom Micro-Batches', 'Private Majlis Pods', 'Complementary Valet Parking'],
+    mapUrl: 'https://maps.app.goo.gl/UvZzSR4YbXitj9KVA'
   },
   {
     id: 'westside-slow',
@@ -141,8 +150,9 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     city: 'Abu Dhabi, UAE',
     phone: '+971 (2) 665-0234',
     hours: '08:00 AM - 12:00 AM',
-    coordinates: { lat: 37.7650, lng: -122.4410 },
-    features: ['Overlooking Premium Yacht Club', 'Nitro Saffron Mocktails', 'Aesthetic Vinyl Sound Room', 'Dates Pairing Salon']
+    coordinates: { lat: 24.4578, lng: 54.3275 },
+    features: ['Overlooking Premium Yacht Club', 'Nitro Saffron Mocktails', 'Aesthetic Vinyl Sound Room', 'Dates Pairing Salon'],
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=24.4578,54.3275'
   },
   {
     id: 'roastery-hq',
@@ -151,8 +161,9 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     city: 'Sharjah, UAE',
     phone: '+971 (6) 555-0841',
     hours: '07:30 AM - 11:30 PM',
-    coordinates: { lat: 37.7490, lng: -122.3888 },
-    features: ['In-House Eco Roasting Yard', 'Scent Profile Seminars', 'Arabic Qahwa Heritage Lab', 'Outdoor Fountain Gazebo']
+    coordinates: { lat: 25.3168, lng: 55.4746 },
+    features: ['In-House Eco Roasting Yard', 'Scent Profile Seminars', 'Arabic Qahwa Heritage Lab', 'Outdoor Fountain Gazebo'],
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=25.3168,55.4746'
   }
 ];
 

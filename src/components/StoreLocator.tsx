@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { STORE_LOCATIONS } from '../data';
 import { StoreLocation } from '../types';
@@ -16,8 +16,35 @@ import {
   Navigation, 
   Check, 
   ChevronRight, 
-  SlidersHorizontal 
+  SlidersHorizontal,
+  ExternalLink
 } from 'lucide-react';
+import { 
+  APIProvider, 
+  Map as GoogleMap, 
+  AdvancedMarker, 
+  Pin, 
+  InfoWindow, 
+  useMap 
+} from '@vis.gl/react-google-maps';
+
+const API_KEY =
+  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
+  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
+  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
+  '';
+const hasValidKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY';
+
+function MapCameraRecenter({ selectedCoords }: { selectedCoords: { lat: number; lng: number } }) {
+  const map = useMap();
+  useEffect(() => {
+    if (map && selectedCoords) {
+      map.panTo(selectedCoords);
+      map.setZoom(13);
+    }
+  }, [map, selectedCoords]);
+  return null;
+}
 
 // Central point of user simulation (Burj Khalifa / Downtown Dubai)
 const USER_COORDINATES = { lat: 25.1972, lng: 55.2744 };
@@ -40,6 +67,13 @@ function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number)
 export default function StoreLocator() {
   const [selectedStore, setSelectedStore] = useState<StoreLocation>(STORE_LOCATIONS[0]);
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'real' | 'vector'>('real');
+  const [activeInfoWindowId, setActiveInfoWindowId] = useState<string | null>(STORE_LOCATIONS[0].id);
+
+  // Sync selectedStore with activeInfoWindowId
+  useEffect(() => {
+    setActiveInfoWindowId(selectedStore.id);
+  }, [selectedStore]);
 
   // Compute distances once based on simulation center
   const storesWithDistance = useMemo(() => {
@@ -210,162 +244,298 @@ export default function StoreLocator() {
         {/* Right Side: Interactive blueprint Vector Map & Directions routing */}
         <div className="lg:col-span-7 space-y-6">
           {/* Blueprint vector frame */}
-          <div className="relative h-72 sm:h-80 bg-[#f9f8f5] border border-neutral-200/90 rounded-3xl overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.015)]">
-            {/* Architectural Grid pattern */}
-            <div className="absolute inset-0 bg-[#e6e4dc]/20 opacity-50 bg-[radial-gradient(#d3cfc5_1px,transparent_1px)] [background-size:16px_16px]" />
-            
-            <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-neutral-200 px-3.5 py-1.5 rounded-full shadow-sm">
-              <Compass className="w-4 h-4 text-neutral-500 animate-pulse" />
-              <span className="text-[10px] font-mono tracking-widest uppercase font-semibold text-neutral-600">
-                Aesthetic Vector Schema Map
-              </span>
+          <div className="relative h-96 bg-[#f9f8f5] border border-neutral-200/90 rounded-3xl overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.015)]">
+            {/* Custom Mode Toggles in Top Right */}
+            <div className="absolute top-4 right-4 z-20 flex items-center bg-white/95 backdrop-blur-md border border-neutral-200 p-1 rounded-xl shadow-sm gap-0.5">
+              <button
+                id="viewmode-real-btn"
+                onClick={() => setViewMode('real')}
+                className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-mono uppercase tracking-wider font-bold cursor-pointer transition-all ${
+                  viewMode === 'real'
+                    ? 'bg-neutral-900 text-white shadow-sm'
+                    : 'text-neutral-500 hover:text-neutral-850'
+                }`}
+              >
+                Interactive Map
+              </button>
+              <button
+                id="viewmode-vector-btn"
+                onClick={() => setViewMode('vector')}
+                className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-mono uppercase tracking-wider font-bold cursor-pointer transition-all ${
+                  viewMode === 'vector'
+                    ? 'bg-neutral-900 text-white shadow-sm'
+                    : 'text-neutral-500 hover:text-neutral-855'
+                }`}
+              >
+                Blueprint Draft
+              </button>
             </div>
 
-            {/* Custom SVG Coordinate Space representing San Francisco */}
-            <svg 
-              id="vector-map-canvas"
-              viewBox="0 0 500 320" 
-              className="w-full h-full select-none"
-            >
-              {/* Custom styled road guidelines mimicking Bay city lines */}
-              <path d="M 50 300 L 450 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
-              <path d="M 50 50 L 450 50" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
-              <path d="M 120 50 L 120 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
-              <path d="M 380 50 L 380 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
-              <path d="M 250 50 L 250 300" stroke="#d0cdc5" strokeWidth="1" strokeDasharray="1 4" />
-              <path d="M 50 175 L 450 175" stroke="#d0cdc5" strokeWidth="1" strokeDasharray="1 4" />
+            {/* Render appropriate map mode */}
+            {viewMode === 'real' ? (
+              !hasValidKey ? (
+                /* Google Maps API Key Key Setup - Constitution C */
+                <div className="absolute inset-0 bg-neutral-900 text-white p-6 flex items-center justify-center">
+                  <div className="max-w-md w-full space-y-4 text-center">
+                    <MapPin className="w-10 h-10 text-amber-500 mx-auto animate-bounce shrink-0" />
+                    <h3 className="text-lg font-serif font-semibold text-white">Google Maps Interactive Access</h3>
+                    <p className="text-xs text-neutral-400 font-sans leading-relaxed">
+                      To activate the fully functional live Google Map indicating actual UAE landmarks, real locations, and turn-by-turn navigation:
+                    </p>
+                    <div className="bg-neutral-950 rounded-xl p-4 text-left border border-neutral-800 space-y-2 text-[10px] font-mono text-neutral-300">
+                      <p><strong>Step 1:</strong> Get a key from the Google Maps Console:</p>
+                      <p className="pl-3 text-[#d8be9a] overflow-x-auto select-all whitespace-nowrap scrollbar-none">
+                        https://console.cloud.google.com/google/maps-apis/start?utm_campaign=gmp-code-assist-ais
+                      </p>
+                      <p className="mt-2"><strong>Step 2:</strong> Paste your API key as a secret in AI Studio:</p>
+                      <ul className="list-disc list-inside pl-3 space-y-1 text-neutral-450">
+                        <li>Click <strong>Settings</strong> (⚙️ gear icon, top-right)</li>
+                        <li>Select <strong>Secrets</strong></li>
+                        <li>Add secret with name <code className="text-amber-300 font-bold select-all">GOOGLE_MAPS_PLATFORM_KEY</code></li>
+                        <li>Type your paste value and hit Enter</li>
+                      </ul>
+                    </div>
+                    <div className="pt-1">
+                      <a 
+                        href="https://console.cloud.google.com/google/maps-apis/start?utm_campaign=gmp-code-assist-ais" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#8c6239] hover:bg-[#a17243] text-white rounded-xl text-xs font-serif font-medium tracking-wide transition-all"
+                      >
+                        <Compass className="w-3.5 h-3.5" />
+                        Get Google Maps API Key
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* True Working Google Map using @vis.gl/react-google-maps - Constitution Framework */
+                <div className="w-full h-full" id="google-interactive-map-container">
+                  <APIProvider apiKey={API_KEY} version="weekly">
+                    <GoogleMap
+                      defaultCenter={selectedStore.coordinates}
+                      defaultZoom={11}
+                      mapId="DEMO_MAP_ID"
+                      gestureHandling="cooperative"
+                      internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
+                      style={{ width: '100%', height: '100%' }}
+                    >
+                      <MapCameraRecenter selectedCoords={selectedStore.coordinates} />
+                      
+                      {storesWithDistance.map((store) => (
+                        <AdvancedMarker
+                          key={store.id}
+                          position={store.coordinates}
+                          onClick={() => {
+                            setSelectedStore(store);
+                            setActiveInfoWindowId(store.id);
+                          }}
+                        >
+                          <Pin 
+                            background={store.id === selectedStore.id ? "#1c1917" : "#8c6239"} 
+                            borderColor={store.id === selectedStore.id ? "#000000" : "#5c4024"} 
+                            glyphColor="#ffffff"
+                            scale={store.id === selectedStore.id ? 1.25 : 1.05}
+                          />
+                        </AdvancedMarker>
+                      ))}
 
-              {/* Bay Coast outline draft line */}
-              <path 
-                d="M 50,40 Q 150,70 240,40 T 450,20" 
-                fill="none" 
-                stroke="#b8b09f" 
-                strokeWidth="1.5" 
-                strokeDasharray="4 2" 
-                opacity="0.6"
-              />
+                      {activeInfoWindowId && (() => {
+                        const store = storesWithDistance.find(s => s.id === activeInfoWindowId);
+                        if (!store) return null;
+                        return (
+                          <InfoWindow
+                            position={store.coordinates}
+                            onCloseClick={() => setActiveInfoWindowId(null)}
+                            headerDisabled
+                          >
+                            <div className="p-1 max-w-[200px] text-neutral-900">
+                              <h6 className="font-serif font-bold text-xs leading-snug">{store.name}</h6>
+                              <p className="text-[10px] text-neutral-500 font-sans mt-0.5">{store.address}</p>
+                              <div className="flex items-center gap-1.5 mt-1.5 text-[9px] font-mono text-neutral-450 z-50">
+                                <span className="text-[#8c6239] font-bold">★ Selected Store</span>
+                                <span>•</span>
+                                <span>{store.hours}</span>
+                              </div>
+                            </div>
+                          </InfoWindow>
+                        );
+                      })()}
+                    </GoogleMap>
+                  </APIProvider>
+                </div>
+              )
+            ) : (
+              /* Original Vector SVG Blueprint View */
+              <div className="w-full h-full relative">
+                {/* Architectural Grid pattern */}
+                <div className="absolute inset-0 bg-[#e6e4dc]/20 opacity-50 bg-[radial-gradient(#d3cfc5_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+                
+                <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-neutral-200 px-3.5 py-1.5 rounded-full shadow-sm">
+                  <Compass className="w-4 h-4 text-neutral-500 animate-pulse" />
+                  <span className="text-[10px] font-mono tracking-widest uppercase font-semibold text-neutral-600">
+                    Aesthetic Vector Schema Map
+                  </span>
+                </div>
 
-              {/* User Position Node */}
-              <g transform="translate(250, 160)">
-                <circle r="12" fill="#8c6239" fillOpacity="0.12" />
-                <circle r="5" fill="#8c6239" className="animate-ping" />
-                <circle r="4.5" fill="#8c6239" stroke="#fff" strokeWidth="1.5" />
-                <text y="-14" textAnchor="middle" className="font-mono text-[9px] fill-neutral-600 font-bold">
-                  YOU
-                </text>
-              </g>
+                {/* Custom SVG Coordinate Space representing Dubai & UAE */}
+                <svg 
+                  id="vector-map-canvas"
+                  viewBox="0 0 500 320" 
+                  className="w-full h-full select-none"
+                >
+                  {/* Custom styled road guidelines mimicking city lines */}
+                  <path d="M 50 300 L 450 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <path d="M 50 50 L 450 50" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <path d="M 120 50 L 120 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <path d="M 380 50 L 380 300" stroke="#d0cdc5" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <path d="M 250 50 L 250 300" stroke="#d0cdc5" strokeWidth="1" strokeDasharray="1 4" />
+                  <path d="M 50 175 L 450 175" stroke="#d0cdc5" strokeWidth="1" strokeDasharray="1 4" />
 
-              {/* Boutique Locations Pin Mapping */}
-              {/* Boutique Espresso Atelier: lat: 37.7915, lng: -122.4018 -> translates on our SVG space */}
-              <g 
-                transform="translate(380, 80)"
-                onClick={() => setSelectedStore(STORE_LOCATIONS[0])}
-                className="cursor-pointer group"
-              >
-                <circle 
-                  r={selectedStore.id === 'metro-atelier' ? "14" : "10"} 
-                  fill={selectedStore.id === 'metro-atelier' ? "#000" : "#8c6239"} 
-                  fillOpacity="0.1" 
-                  className="transition-all duration-300"
-                />
-                <path 
-                  d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
-                  fill={selectedStore.id === 'metro-atelier' ? "#262626" : "#b09c85"}
-                  stroke="#fff"
-                  strokeWidth="1"
-                />
-                <circle r="2" cy="-5" fill="#fff" />
-              </g>
+                  {/* Coast outline draft line */}
+                  <path 
+                    d="M 50,40 Q 150,70 240,40 T 450,20" 
+                    fill="none" 
+                    stroke="#b8b09f" 
+                    strokeWidth="1.5" 
+                    strokeDasharray="4 2" 
+                    opacity="0.6"
+                  />
 
-              {/* The Slow Lounge: lat: 37.7650, lng: -122.4410 */}
-              <g 
-                transform="translate(120, 210)"
-                onClick={() => setSelectedStore(STORE_LOCATIONS[1])}
-                className="cursor-pointer group"
-              >
-                <circle 
-                  r={selectedStore.id === 'westside-slow' ? "14" : "10"} 
-                  fill={selectedStore.id === 'westside-slow' ? "#000" : "#8c6239"} 
-                  fillOpacity="0.1"
-                  className="transition-all duration-300"
-                />
-                <path 
-                  d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
-                  fill={selectedStore.id === 'westside-slow' ? "#262626" : "#b09c85"}
-                  stroke="#fff"
-                  strokeWidth="1"
-                />
-                <circle r="2" cy="-5" fill="#fff" />
-              </g>
+                  {/* User Position Node */}
+                  <g transform="translate(250, 160)">
+                    <circle r="12" fill="#8c6239" fillOpacity="0.12" />
+                    <circle r="5" fill="#8c6239" className="animate-ping" />
+                    <circle r="4.5" fill="#8c6239" stroke="#fff" strokeWidth="1.5" />
+                    <text y="-14" textAnchor="middle" className="font-mono text-[9px] fill-neutral-600 font-bold">
+                      YOU
+                    </text>
+                  </g>
 
-              {/* Roastery HQ: lat: 37.7490, lng: -122.3888 */}
-              <g 
-                transform="translate(410, 270)"
-                onClick={() => setSelectedStore(STORE_LOCATIONS[2])}
-                className="cursor-pointer"
-              >
-                <circle 
-                  r={selectedStore.id === 'roastery-hq' ? "14" : "10"} 
-                  fill={selectedStore.id === 'roastery-hq' ? "#000" : "#8c6239"} 
-                  fillOpacity="0.1"
-                  className="transition-all duration-300"
-                />
-                <path 
-                  d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
-                  fill={selectedStore.id === 'roastery-hq' ? "#262626" : "#b09c85"}
-                  stroke="#fff"
-                  strokeWidth="1"
-                />
-                <circle r="2" cy="-5" fill="#fff" />
-              </g>
+                  {/* Boutique Locations Pin Mapping */}
+                  <g 
+                    transform="translate(380, 80)"
+                    onClick={() => setSelectedStore(STORE_LOCATIONS[0])}
+                    className="cursor-pointer group"
+                  >
+                    <circle 
+                      r={selectedStore.id === 'metro-atelier' ? "14" : "10"} 
+                      fill={selectedStore.id === 'metro-atelier' ? "#000" : "#8c6239"} 
+                      fillOpacity="0.1" 
+                      className="transition-all duration-300"
+                    />
+                    <path 
+                      d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
+                      fill={selectedStore.id === 'metro-atelier' ? "#262626" : "#b09c85"}
+                      stroke="#fff"
+                      strokeWidth="1"
+                    />
+                    <circle r="2" cy="-5" fill="#fff" />
+                  </g>
 
-              {/* Animated walking path tracing based on selections */}
-              {selectedStore.id === 'metro-atelier' && (
-                <motion.path 
-                  d="M 250,160 L 380,160 L 380,80" 
-                  fill="none" 
-                  stroke="#8c6239" 
-                  strokeWidth="2" 
-                  strokeDasharray="6 4"
-                  initial={{ strokeDashoffset: 100 }}
-                  animate={{ strokeDashoffset: 0 }}
-                  transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
-                />
-              )}
-              {selectedStore.id === 'westside-slow' && (
-                <motion.path 
-                  d="M 250,160 L 120,160 L 120,210" 
-                  fill="none" 
-                  stroke="#8c6239" 
-                  strokeWidth="2" 
-                  strokeDasharray="6 4"
-                  initial={{ strokeDashoffset: 100 }}
-                  animate={{ strokeDashoffset: 0 }}
-                  transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
-                />
-              )}
-              {selectedStore.id === 'roastery-hq' && (
-                <motion.path 
-                  d="M 250,160 L 250,270 L 410,270" 
-                  fill="none" 
-                  stroke="#8c6239" 
-                  strokeWidth="2" 
-                  strokeDasharray="6 4"
-                  initial={{ strokeDashoffset: 100 }}
-                  animate={{ strokeDashoffset: 0 }}
-                  transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
-                />
-              )}
-            </svg>
+                  {/* Al Bateen: lat: 24.4578, lng: 54.3275 */}
+                  <g 
+                    transform="translate(120, 210)"
+                    onClick={() => setSelectedStore(STORE_LOCATIONS[1])}
+                    className="cursor-pointer group"
+                  >
+                    <circle 
+                      r={selectedStore.id === 'westside-slow' ? "14" : "10"} 
+                      fill={selectedStore.id === 'westside-slow' ? "#000" : "#8c6239"} 
+                      fillOpacity="0.1"
+                      className="transition-all duration-300"
+                    />
+                    <path 
+                      d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
+                      fill={selectedStore.id === 'westside-slow' ? "#262626" : "#b09c85"}
+                      stroke="#fff"
+                      strokeWidth="1"
+                    />
+                    <circle r="2" cy="-5" fill="#fff" />
+                  </g>
+
+                  {/* Aljada: lat: 25.3168, lng: 55.4746 */}
+                  <g 
+                    transform="translate(410, 270)"
+                    onClick={() => setSelectedStore(STORE_LOCATIONS[2])}
+                    className="cursor-pointer"
+                  >
+                    <circle 
+                      r={selectedStore.id === 'roastery-hq' ? "14" : "10"} 
+                      fill={selectedStore.id === 'roastery-hq' ? "#000" : "#8c6239"} 
+                      fillOpacity="0.1"
+                      className="transition-all duration-300"
+                    />
+                    <path 
+                      d="M0 -11 C-4 -11 -6 -8 -6 -5 C-6 -1 -1.5 6 0 9 C1.5 6 6 -1 6 -5 C6 -8 4 -11 0 -11 Z" 
+                      fill={selectedStore.id === 'roastery-hq' ? "#262626" : "#b09c85"}
+                      stroke="#fff"
+                      strokeWidth="1"
+                    />
+                    <circle r="2" cy="-5" fill="#fff" />
+                  </g>
+
+                  {/* Animated walking path tracing based on selections */}
+                  {selectedStore.id === 'metro-atelier' && (
+                    <motion.path 
+                      d="M 250,160 L 380,160 L 380,80" 
+                      fill="none" 
+                      stroke="#8c6239" 
+                      strokeWidth="2" 
+                      strokeDasharray="6 4"
+                      initial={{ strokeDashoffset: 100 }}
+                      animate={{ strokeDashoffset: 0 }}
+                      transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
+                    />
+                  )}
+                  {selectedStore.id === 'westside-slow' && (
+                    <motion.path 
+                      d="M 250,160 L 120,160 L 120,210" 
+                      fill="none" 
+                      stroke="#8c6239" 
+                      strokeWidth="2" 
+                      strokeDasharray="6 4"
+                      initial={{ strokeDashoffset: 100 }}
+                      animate={{ strokeDashoffset: 0 }}
+                      transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
+                    />
+                  )}
+                  {selectedStore.id === 'roastery-hq' && (
+                    <motion.path 
+                      d="M 250,160 L 250,270 L 410,270" 
+                      fill="none" 
+                      stroke="#8c6239" 
+                      strokeWidth="2" 
+                      strokeDasharray="6 4"
+                      initial={{ strokeDashoffset: 100 }}
+                      animate={{ strokeDashoffset: 0 }}
+                      transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
+                    />
+                  )}
+                </svg>
+              </div>
+            )}
           </div>
 
           {/* Directions detail box below map */}
           <div className="border border-neutral-200 bg-white rounded-3xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-neutral-100 pb-3">
-              <Navigation className="w-4.5 h-4.5 text-[#8c6239]" />
-              <h5 className="font-serif text-base text-neutral-900 leading-tight">
-                Walking Route to {selectedStore.name}
-              </h5>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-neutral-100 pb-4">
+              <div className="flex items-center gap-2">
+                <Navigation className="w-4.5 h-4.5 text-[#8c6239]" />
+                <h5 className="font-serif text-base text-neutral-900 leading-tight">
+                  Walking Route to {selectedStore.name}
+                </h5>
+              </div>
+              <a
+                href={selectedStore.mapUrl || `https://www.google.com/maps/dir/?api=1&origin=${USER_COORDINATES.lat},${USER_COORDINATES.lng}&destination=${selectedStore.coordinates.lat},${selectedStore.coordinates.lng}`}
+                target="_blank"
+                referrerPolicy="no-referrer"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#8c6239] hover:bg-neutral-950 text-white rounded-xl text-[10px] font-mono font-bold tracking-wider uppercase transition-colors shadow-sm"
+              >
+                <span>Get Live Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             </div>
 
             <div className="space-y-4">

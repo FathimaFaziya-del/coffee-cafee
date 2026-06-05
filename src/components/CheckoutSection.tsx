@@ -306,13 +306,24 @@ export default function CheckoutSection({
                   <p className="text-[11px] text-neutral-500 font-sans mt-0.5">
                     742 Jumeirah Beach Road, Dubai, UAE
                   </p>
-                  <button
-                    id="find-cafe-btn"
-                    onClick={onNavigateToLocator}
-                    className="text-xs text-[#8c6239] hover:text-neutral-900 font-mono font-bold mt-2 flex items-center gap-1 focus:outline-none cursor-pointer"
-                  >
-                    Open Blueprint Map & Directions →
-                  </button>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2">
+                    <button
+                      id="find-cafe-btn"
+                      onClick={onNavigateToLocator}
+                      className="text-xs text-[#8c6239] hover:text-neutral-900 font-mono font-bold flex items-center gap-1 focus:outline-none cursor-pointer"
+                    >
+                      Open Blueprint Map & Directions →
+                    </button>
+                    <span className="text-neutral-300 text-xs hidden sm:inline">•</span>
+                    <a
+                      href="https://maps.app.goo.gl/UvZzSR4YbXitj9KVA"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-neutral-500 hover:text-neutral-900 font-mono font-bold flex items-center gap-0.5 focus:outline-none cursor-pointer"
+                    >
+                      Open in Google Maps ↗
+                    </a>
+                  </div>
                 </div>
               </div>
 
