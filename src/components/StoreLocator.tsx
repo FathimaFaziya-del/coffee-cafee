@@ -19,12 +19,12 @@ import {
   SlidersHorizontal 
 } from 'lucide-react';
 
-// Central point of user simulation (SF City Center)
-const USER_COORDINATES = { lat: 37.7749, lng: -122.4194 };
+// Central point of user simulation (Burj Khalifa / Downtown Dubai)
+const USER_COORDINATES = { lat: 25.1972, lng: 55.2744 };
 
-// Helper to calculate distance in miles
-function getDistanceInMiles(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 3958.8; // Radius of the Earth in miles
+// Helper to calculate distance in km
+function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // Radius of the Earth in km
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
@@ -44,7 +44,7 @@ export default function StoreLocator() {
   // Compute distances once based on simulation center
   const storesWithDistance = useMemo(() => {
     return STORE_LOCATIONS.map((store) => {
-      const distance = getDistanceInMiles(
+      const distance = getDistanceInKm(
         USER_COORDINATES.lat,
         USER_COORDINATES.lng,
         store.coordinates.lat,
@@ -76,22 +76,22 @@ export default function StoreLocator() {
   const sampleDirections = useMemo(() => {
     if (selectedStore.id === 'metro-atelier') {
       return [
-        { instruction: 'Head East on Market St toward Pine St', dist: '0.3 mi' },
-        { instruction: 'Turn left onto Pine St', dist: '0.4 mi' },
-        { instruction: 'Destination will be on the right, across from redwood courtyard', dist: '100 ft' },
+        { instruction: 'Head West on Financial Centre Rd toward Jumeirah', dist: '1.2 km' },
+        { instruction: 'Merge onto Jumeirah Beach Rd. Continue past Dubai Canal Bridge', dist: '1.5 km' },
+        { instruction: 'Destination will be on your right, past Jumeirah 2 park', dist: '300 m' },
       ];
     }
     if (selectedStore.id === 'westside-slow') {
       return [
-        { instruction: 'Head West on Fell St toward Golden Gate Park', dist: '0.6 mi' },
-        { instruction: 'Turn left onto River Parkway', dist: '0.5 mi' },
-        { instruction: 'Destination is adjacent to the vinyl music pavilion', dist: '250 ft' },
+        { instruction: 'Head South on Sheikh Zayed Rd (E11) toward Abu Dhabi', dist: '120 km' },
+        { instruction: 'Take Al Bateen exit toward waterfront promenade', dist: '2.4 km' },
+        { instruction: 'Turn right into Marina Walk. Lounge is adjacent to Yacht Walk', dist: '400 m' },
       ];
     }
     return [
-      { instruction: 'Head South toward Southern Embarcadero Freeway', dist: '0.8 mi' },
-      { instruction: 'Turn right onto Industrial Boulevard', dist: '0.2 mi' },
-      { instruction: 'Proceed through security gate into Roastery Compound', dist: '150 ft' },
+      { instruction: 'Head Northeast on E11 Highway toward Sharjah', dist: '25 km' },
+      { instruction: 'Take exit toward Aljada master development', dist: '1.8 km' },
+      { instruction: 'Proceed around Zaha Hadid Boulevard Pavilion to Roastery parking', dist: '600 m' },
     ];
   }, [selectedStore]);
 
@@ -175,7 +175,7 @@ export default function StoreLocator() {
                     </div>
                     {/* Distance Badge */}
                     <span className="text-xs font-mono font-bold text-[#8c6239] bg-[#fcf8f2] px-2 py-1 rounded-md border border-[#e8dcc4]/40 shrink-0">
-                      {store.distance} miles
+                      {store.distance} km
                     </span>
                   </div>
 
@@ -390,9 +390,9 @@ export default function StoreLocator() {
             <div className="pt-4 border-t border-neutral-150 flex items-center justify-between text-xs font-mono text-neutral-400">
               <span className="flex items-center gap-1">
                 <Compass className="w-3.5 h-3.5" />
-                Origin: San Francisco Center
+                Origin: Downtown Dubai (Burj Khalifa)
               </span>
-              <span>Total Travel: ~12 Mins walking</span>
+              <span>Total Travel: Premium Transit Route</span>
             </div>
           </div>
         </div>

@@ -46,7 +46,7 @@ export default function CheckoutSection({
   const subtotal = cart.reduce((acc, item) => {
     let itemPrice = item.menuItem.price;
     if (item.customization.extraShots) {
-      itemPrice += 0.85;
+      itemPrice += 4.00; // PREMIUM extra shot in AED
     }
     return acc + itemPrice * item.quantity;
   }, 0);
@@ -55,18 +55,18 @@ export default function CheckoutSection({
   let discount = 0;
   if (appliedVoucher) {
     if (appliedVoucher.type === 'percentage') {
-      // If code is ESPRESSO20, discount only applies to category espresso
-      if (appliedVoucher.code === 'ESPRESSO20') {
+      // If code is DXB20, discount only applies to category espresso
+      if (appliedVoucher.code === 'DXB20') {
         const espressoSubtotal = cart.reduce((acc, item) => {
           if (item.menuItem.category === 'espresso') {
-            const price = item.menuItem.price + (item.customization.extraShots ? 0.85 : 0);
+            const price = item.menuItem.price + (item.customization.extraShots ? 4.00 : 0);
             return acc + price * item.quantity;
           }
           return acc;
         }, 0);
         discount = espressoSubtotal * (appliedVoucher.value / 100);
-      } else if (appliedVoucher.code === 'BREWLOVE') {
-        // filter v60 category
+      } else if (appliedVoucher.code === 'HILAL15') {
+        // filter category
         const filterSubtotal = cart.reduce((acc, item) => {
           if (item.menuItem.category === 'filter') {
             const price = item.menuItem.price;
@@ -83,7 +83,7 @@ export default function CheckoutSection({
     }
   }
 
-  const taxRate = 0.0825; // 8.25% CA state tax
+  const taxRate = 0.05; // 5% UAE VAT rate
   const discountedSubtotal = Math.max(0, subtotal - discount);
   const tax = discountedSubtotal * taxRate;
   const totalPrice = discountedSubtotal + tax;
@@ -268,13 +268,13 @@ export default function CheckoutSection({
                 Ready for Pickup!
               </h3>
               <p className="text-sm text-neutral-500 font-sans max-w-sm mx-auto">
-                Your bespoke slow coffee blend is waiting on the pour-over counter Barista shelf at the Downtown Atelier.
+                Your bespoke slow coffee blend is waiting on the pour-over counter Barista shelf at the Jumeirah Pavilion.
               </p>
             </div>
 
             {/* Custom Digital Receipt */}
             <div className="border border-neutral-200 bg-white rounded-2xl p-6 shadow-sm space-y-6 relative overflow-hidden">
-              <div className="w-full h-2 bg-neutral-900 absolute top-0 left-0" />
+              <div className="w-full h-2 bg-neutral-950 absolute top-0 left-0" />
               
               <div className="flex justify-between items-start border-b border-neutral-100 pb-5">
                 <div>
@@ -282,7 +282,7 @@ export default function CheckoutSection({
                     ORDER SERIAL
                   </span>
                   <p className="font-mono text-sm font-semibold text-neutral-800 mt-0.5">
-                    #AMN-798-COFFEE
+                    #KHW-798-COFFEE
                   </p>
                 </div>
                 <div className="text-right">
@@ -301,10 +301,10 @@ export default function CheckoutSection({
                 <MapPin className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs font-semibold text-neutral-800 font-sans block">
-                    Boutique Espresso Atelier
+                    KÁHWA Specialty Pavilion - Jumeirah
                   </span>
                   <p className="text-[11px] text-neutral-500 font-sans mt-0.5">
-                    142 Pine Street, Downtown SF
+                    742 Jumeirah Beach Road, Dubai, UAE
                   </p>
                   <button
                     id="find-cafe-btn"
@@ -320,7 +320,7 @@ export default function CheckoutSection({
               <div className="pt-2 flex flex-col items-center justify-center border-t border-neutral-100">
                 <Barcode className="w-48 h-12 text-neutral-800 stroke-[1.25]" />
                 <span className="text-[10px] font-mono text-neutral-400 mt-2 tracking-widest">
-                  *7985550192*
+                  *97143881920*
                 </span>
               </div>
             </div>
@@ -400,7 +400,7 @@ export default function CheckoutSection({
                         {item.menuItem.name}
                       </h4>
                       <span className="font-mono text-sm font-bold text-neutral-900 shrink-0">
-                        ${((item.menuItem.price + (item.customization.extraShots ? 0.85 : 0)) * item.quantity).toFixed(2)}
+                        AED {((item.menuItem.price + (item.customization.extraShots ? 4.00 : 0)) * item.quantity).toFixed(2)}
                       </span>
                     </div>
 
@@ -491,25 +491,25 @@ export default function CheckoutSection({
             <div className="flex justify-between">
               <span>Items Total</span>
               <span className="font-mono text-neutral-900 font-medium">
-                ${subtotal.toFixed(2)}
+                AED {subtotal.toFixed(2)}
               </span>
             </div>
 
             {appliedVoucher && (
               <div className="flex justify-between text-emerald-700">
                 <span>Loyalty Reward ({appliedVoucher.code})</span>
-                <span className="font-mono font-medium">-${discount.toFixed(2)}</span>
+                <span className="font-mono font-medium">-AED {discount.toFixed(2)}</span>
               </div>
             )}
 
             <div className="flex justify-between text-neutral-400 text-xs italic">
-              <span>CA State Sales Tax (8.25%)</span>
-              <span className="font-mono font-medium">${tax.toFixed(2)}</span>
+              <span>UAE VAT (5%)</span>
+              <span className="font-mono font-medium">AED {tax.toFixed(2)}</span>
             </div>
 
             <div className="border-t border-neutral-150 pt-3 flex justify-between text-base font-serif font-bold text-neutral-950">
               <span>Bill Due Total</span>
-              <span className="font-mono text-lg">${totalPrice.toFixed(2)}</span>
+              <span className="font-mono text-lg">AED {totalPrice.toFixed(2)}</span>
             </div>
           </div>
 
@@ -518,7 +518,7 @@ export default function CheckoutSection({
             onClick={startOrderSimulation}
             className="w-full mt-4 py-3.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-center text-sm font-medium tracking-wide transition-all duration-300 shadow-sm cursor-pointer"
           >
-            Confirm pickup order • ${totalPrice.toFixed(2)}
+            Confirm pickup order • AED {totalPrice.toFixed(2)}
           </button>
         </div>
       </div>

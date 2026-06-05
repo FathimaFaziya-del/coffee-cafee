@@ -21,15 +21,15 @@ export const IMAGES = {
 export const MENU_ITEMS: MenuItem[] = [
   {
     id: 'flat-white',
-    name: 'Artisan Flat White',
-    description: 'Double shot of our signature house sweet ristretto, blanketed with velvet whole-milk micro-foam containing tiny, uniform bubbles.',
-    price: 4.85,
+    name: 'Cardamom Infused Flat White',
+    description: 'Double shot of our signature house ristretto with a delicate dusting of premium green organic cardamom, blanketed with velvet camel milk or organic whole-milk micro-foam.',
+    price: 26.00,
     category: 'espresso',
     image: IMAGES.drink,
     roastLevel: 'Medium-Light',
-    notes: ['Sweet Cocoa', 'Toasted Hazelnut', 'Caramelized Sugar'],
+    notes: ['Green Cardamom', 'Sweet Cocoa', 'Toasted Hazelnut'],
     customizationOptions: {
-      milk: ['Whole Milk', 'Oat Milk', 'Almond Milk', 'Coconut Milk'],
+      milk: ['Whole Milk', 'Oat Milk', 'Premium Camel Milk', 'Almond Milk'],
       temperature: ['Hot', 'Iced'],
       size: ['Standard (8oz)', 'Large (12oz)'],
       extraShots: true,
@@ -38,14 +38,14 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'pour-over',
-    name: 'Single Origin V60 Pour Over',
-    description: 'Slow-drip filtered coffee prepared by hand. Clean cup emphasizing vibrant terroir notes and sparkling acidity.',
-    price: 5.50,
+    name: 'Yemeni Haraz V60 Pour Over',
+    description: 'Bespoke hand-poured slow filter. Sourced from the ancient terraced hills of Haraz, Yemen. Delivers outstanding purity with dynamic floral tones.',
+    price: 36.00,
     category: 'filter',
     image: IMAGES.pour,
-    origin: 'Ethiopia Yirgacheffe',
+    origin: 'Haraz Mountains, Yemen',
     roastLevel: 'Light',
-    notes: ['Jasmine Florals', 'Peach Nectar', 'Bergamot Tea'],
+    notes: ['Jasmine Florals', 'Wild Honey', 'Red Currant'],
     customizationOptions: {
       temperature: ['Hot', 'Iced'],
       size: ['12oz Pour', '16oz Pour'],
@@ -54,51 +54,51 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'nitro-brew',
-    name: 'Craft Nitro Cold Brew',
-    description: 'Slow-steeped cold brew infused with food-grade nitrogen gas straight from the tap for a thick, creamy head similar to stout beer.',
-    price: 5.25,
+    name: 'Golden Saffron Nitro Draft',
+    description: 'Premium slow-steeped cold brew infused with organic saffron threads and nitrogen gas on tap for a velvety, creamy crown and luxurious spice finish.',
+    price: 29.00,
     category: 'cold_craft',
     image: IMAGES.pour,
     roastLevel: 'Medium-Dark',
-    notes: ['Dark Chocolate', 'Molasses', 'Creamy Mouthfeel'],
+    notes: ['Pure Saffron', 'Dark Chocolate', 'Warm Creamy Finish'],
     customizationOptions: {
       size: ['Regular (12oz)', 'Tall (16oz)'],
-      sweetness: ['None', 'Vanilla Syrup', 'Caramel Syrup']
+      sweetness: ['None', 'Saffron Syrup', 'Vanilla Syrup']
     }
   },
   {
     id: 'beans-yirgacheffe',
-    name: 'Ethiopia Yirgacheffe Beans',
-    description: 'Whole roasted specialty beans. Heirloom varieties grown at 2,000 meters above sea level, natural sun-dried process.',
-    price: 19.00,
+    name: 'Yemen Haraz Peaberry Beans',
+    description: 'Ultra-rare whole roasted micro-lot beans. Hand-harvested in high elevations, naturally sun-dried on vintage rooftop beds, bringing sublime complex fruit sweetness.',
+    price: 135.00,
     category: 'beans',
     image: IMAGES.beans,
-    origin: 'Kochere District, Yirgacheffe',
+    origin: 'Haraz Highlands, Yemen',
     roastLevel: 'Light',
-    notes: ['Blueberry Jam', 'Black Tea', 'Lemon Lavender']
+    notes: ['Blackberry Jam', 'Saffron Threads', 'Warm Bergamot']
   },
   {
     id: 'beans-colombia',
-    name: 'Colombia Supremo Huila',
-    description: 'Directly sourced estate-grown whole bean coffee. Wet wash-processed, dried on raised African beds under covers.',
-    price: 17.50,
+    name: 'Panama Geisha Esmeralda Beans',
+    description: 'The world\'s most prized floral profile. Sourced directly from Hacienda La Esmeralda. Complex jasmine florality meets sparkling clean processing.',
+    price: 185.00,
     category: 'beans',
     image: IMAGES.beans,
-    origin: 'Pitalito, Huila',
-    roastLevel: 'Medium',
-    notes: ['Red Apple', 'Brown Sugar', 'Almond Praline']
+    origin: 'Boquete, Panama',
+    roastLevel: 'Light',
+    notes: ['Jasmine Tea', 'Orange Blossom', 'Sweet Peach']
   },
   {
     id: 'cappuccino',
-    name: 'Classic Cardamom Cappuccino',
-    description: 'Equal thirds of intense espresso, sweet steamed milk, and heavy dry foam, topped with organic cardamom powder.',
-    price: 4.95,
+    name: 'Rose Water & Cardamom Cappuccino',
+    description: 'Espresso blanketed with rich, tight micro-foam touched with double-distilled Lebanese rose water and a pinch of hand-ground Emirati cardamom.',
+    price: 28.00,
     category: 'espresso',
     image: IMAGES.drink,
     roastLevel: 'Medium',
-    notes: ['Warm Spice', 'Citrus Peel', 'Rich Cream'],
+    notes: ['Damascene Rose', 'Spiced Pods', 'Sweet Buttercream'],
     customizationOptions: {
-      milk: ['Whole Milk', 'Oat Milk', 'Almond Milk'],
+      milk: ['Whole Milk', 'Premium Camel Milk', 'Oat Milk'],
       temperature: ['Hot'],
       size: ['Standard (6oz)', 'Large (10oz)'],
       extraShots: true,
@@ -107,15 +107,15 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'iced-latte',
-    name: 'Iced Maple Pecan Latte',
-    description: 'Espresso combined with fresh cold milk, 100% grade-A maple syrup, organic pecan extract, and cold cubes.',
-    price: 5.50,
+    name: 'Gourmet Date Butter Cold Latte',
+    description: 'Artisanal ristretto extraction combined with fresh chilled farm milk, integrated organic Khalas date honey syrup, and premium pecan praline dust.',
+    price: 32.00,
     category: 'cold_craft',
     image: IMAGES.drink,
     roastLevel: 'Medium-Light',
-    notes: ['Maple Butter', 'Pecan Praline', 'Creamy Caramel'],
+    notes: ['Khalas Date Nectar', 'Caramelized Pecan', 'Sweet Cream'],
     customizationOptions: {
-      milk: ['Whole Milk', 'Oat Milk', 'Almond Milk'],
+      milk: ['Whole Milk', 'Premium Camel Milk', 'Oat Milk'],
       size: ['Regular (12oz)', 'Large (16oz)'],
       extraShots: true,
       sweetness: ['Light', 'Regular', 'Extra']
@@ -126,59 +126,59 @@ export const MENU_ITEMS: MenuItem[] = [
 export const STORE_LOCATIONS: StoreLocation[] = [
   {
     id: 'metro-atelier',
-    name: 'Boutique Espresso Atelier',
-    address: '142 Pine Street, Downtown',
-    city: 'San Francisco, CA',
-    phone: '+1 (415) 555-0192',
-    hours: '07:00 AM - 06:00 PM',
+    name: 'KÁHWA Specialty Pavilion - Jumeirah',
+    address: '742 Jumeirah Beach Road, Jumeirah 2',
+    city: 'Dubai, UAE',
+    phone: '+971 (4) 388-1920',
+    hours: '08:00 AM - 12:00 AM',
     coordinates: { lat: 37.7915, lng: -122.4018 },
-    features: ['Pour Over Slow Bar', 'Custom Roasts', 'Indoor Garden Courtyard', 'Valet Parking']
+    features: ['Yemeni Slow Bar', 'Custom Micro-Batches', 'Private Majlis Pods', 'Complementary Valet Parking']
   },
   {
     id: 'westside-slow',
-    name: 'The Slow Lounge & Brew Bar',
-    address: '812 River Parkway, Westside',
-    city: 'San Francisco, CA',
-    phone: '+1 (415) 555-0234',
-    hours: '08:00 AM - 07:00 PM',
+    name: 'KÁHWA Waterfront Lounge - Al Bateen',
+    address: 'Al Bateen Marina, Marina Walk',
+    city: 'Abu Dhabi, UAE',
+    phone: '+971 (2) 665-0234',
+    hours: '08:00 AM - 12:00 AM',
     coordinates: { lat: 37.7650, lng: -122.4410 },
-    features: ['Manual V60 Station', 'Nitro Taps', 'Vinyl Record Sound System', 'Pet Friendly']
+    features: ['Overlooking Premium Yacht Club', 'Nitro Saffron Mocktails', 'Aesthetic Vinyl Sound Room', 'Dates Pairing Salon']
   },
   {
     id: 'roastery-hq',
-    name: 'Coffee Co. Roastery HQ',
-    address: '109 Industrial Boulevard',
-    city: 'San Francisco, CA',
-    phone: '+1 (415) 555-0841',
-    hours: '06:30 AM - 04:30 PM',
+    name: 'KÁHWA Roastery Headquarters - Aljada',
+    address: 'Zaha Hadid Boulevard, Aljada Pavilion',
+    city: 'Sharjah, UAE',
+    phone: '+971 (6) 555-0841',
+    hours: '07:30 AM - 11:30 PM',
     coordinates: { lat: 37.7490, lng: -122.3888 },
-    features: ['Live Roasting Demos', 'Cupping Seminars', 'Wholesale Bean Dispensary', 'Outdoor Deck']
+    features: ['In-House Eco Roasting Yard', 'Scent Profile Seminars', 'Arabic Qahwa Heritage Lab', 'Outdoor Fountain Gazebo']
   }
 ];
 
 export const VALID_VOUCHERS: Voucher[] = [
   {
-    code: 'COFFEE10',
+    code: 'MARHABA10',
     type: 'percentage',
     value: 10,
     description: '10% off your entire order'
   },
   {
-    code: 'ESPRESSO20',
+    code: 'DXB20',
     type: 'percentage',
     value: 20,
     description: '20% off all espresso craft items'
   },
   {
-    code: 'WELCOME5',
+    code: 'KAHWA5',
     type: 'fixed',
     value: 5.00,
-    description: '$5.00 off welcome back reward'
+    description: 'AED 5.00 off greeting reward'
   },
   {
-    code: 'BREWLOVE',
+    code: 'HILAL15',
     type: 'percentage',
     value: 15,
-    description: '15% off any V60 single origin'
+    description: '15% off any single origin'
   }
 ];

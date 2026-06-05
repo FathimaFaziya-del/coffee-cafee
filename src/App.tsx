@@ -125,14 +125,14 @@ export default function App() {
             className="flex items-center gap-2 cursor-pointer group"
           >
             <div className="w-8.5 h-8.5 rounded-xl bg-neutral-950 flex items-center justify-center text-white font-serif text-base font-bold shadow-sm group-hover:rotate-12 transition-transform duration-300">
-              C
+              K
             </div>
             <div>
               <span className="font-serif text-lg tracking-tight font-medium text-neutral-900 block leading-tight">
-                COFFEE CO.
+                KÁHWA ATELIER
               </span>
               <span className="font-mono text-[9px] uppercase tracking-widest text-[#8c6239] block font-bold leading-none">
-                Specialty Roastery
+                Specialty Coffee • UAE
               </span>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function App() {
               }`}
             >
               <Coffee className="w-3.5 h-3.5" />
-              Slow Brews
+              Káhwa & Brews
             </button>
             <button
               id="tab-btn-locator"
@@ -161,7 +161,7 @@ export default function App() {
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
-              Atelier Blueprint Map
+              Atelier Blueprint
             </button>
             <button
               id="tab-btn-checkout"
@@ -173,7 +173,7 @@ export default function App() {
               }`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
-              Checkout Basket
+              Checkout Bag
               {cartItemsCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-neutral-950 text-[10px] font-mono font-bold text-white ring-2 ring-white">
                   {cartItemsCount}
@@ -291,19 +291,19 @@ export default function App() {
                 {/* Hero information content */}
                 <div className="relative z-20 max-w-lg space-y-5 text-white">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse fill-yellow-400/20" />
+                    <Sparkles className="w-4 h-4 text-amber-400 animate-pulse fill-amber-400/20" />
                     <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#d8be9a]">
-                      SLOW Extraction PHILOSOPHY
+                      UAE SPECIALTY HERITAGE & SLOW BAR
                     </span>
                   </div>
 
                   <h1 className="text-4xl sm:text-5xl font-serif font-semibold tracking-tight italic leading-tight">
-                    Artisanal Brews, <br />
+                    Premium Roasts, <br />
                     steeped with presence.
                   </h1>
 
                   <p className="text-sm sm:text-base text-neutral-300 font-sans leading-relaxed">
-                    We select micro-lots at high elevations to capture fruit-forward notes like jasmine and lavender. Every roast is coaxed manually in small quantities.
+                    Sourcing ultra-exceptional Yemeni Haraz and sun-dried Geisha microlots naturally tailored for the Arabian palate. Impeccably crafted for absolute tranquility.
                   </p>
 
                   <div className="pt-2 flex flex-wrap gap-3">
@@ -376,25 +376,25 @@ export default function App() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded bg-neutral-900 flex items-center justify-center text-white font-serif text-[11px] font-bold">
-              C
+              K
             </div>
             <span className="font-serif text-sm font-semibold tracking-wide text-neutral-800">
-              COFFEE CO.
+              KÁHWA ATELIER
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-mono font-semibold uppercase text-neutral-400">
-            <button onClick={() => setActiveTab('menu')} className="hover:text-neutral-950 transition-colors cursor-pointer">Slow Brews</button>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-mono font-semibold uppercase text-[#8c6239]">
+            <button onClick={() => setActiveTab('menu')} className="hover:text-neutral-950 transition-colors cursor-pointer">Káhwa & Brews</button>
             <button onClick={() => setActiveTab('locator')} className="hover:text-neutral-950 transition-colors cursor-pointer">Ateliers</button>
-            <button onClick={() => setActiveTab('checkout')} className="hover:text-neutral-950 transition-colors cursor-pointer">Baskets</button>
+            <button onClick={() => setActiveTab('checkout')} className="hover:text-neutral-950 transition-colors cursor-pointer">Checkout Bag</button>
           </div>
 
           <div className="text-center md:text-right space-y-1">
             <p className="text-xs font-sans">
-              Designed with precision • {new Date().getFullYear()} Coffee Boutique, Inc.
+              Designed with precision • {new Date().getFullYear()} KÁHWA Specialty Atelier, Dubai, UAE.
             </p>
             <p className="text-[10px] text-neutral-400 font-mono">
-              Heirloom Single Origin Brews • 100% Arabica
+              Ancient Yemeni Terroirs & Geisha Micro-Lots • 100% Specialty Arabica
             </p>
           </div>
         </div>

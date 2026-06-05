@@ -44,7 +44,7 @@ export default function CoffeeSelectorModal({ item, onClose, onAddToCart }: Coff
   if (!item) return null;
 
   // Extra shot adds a small premium
-  const extraCost = extraShots ? 0.85 : 0;
+  const extraCost = extraShots ? 4.00 : 0;
   const currentTotal = item.price + extraCost;
 
   const handleConfirm = () => {
@@ -109,7 +109,7 @@ export default function CoffeeSelectorModal({ item, onClose, onAddToCart }: Coff
               <div>
                 <h4 className="text-xl font-serif text-neutral-900">{item.name}</h4>
                 <p className="text-xs text-[#8c6239] font-mono mt-0.5">
-                  Base Price: ${item.price.toFixed(2)}
+                  Base Price: AED {item.price.toFixed(2)}
                 </p>
               </div>
             </div>
@@ -228,7 +228,7 @@ export default function CoffeeSelectorModal({ item, onClose, onAddToCart }: Coff
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-medium text-neutral-500">+$0.85</span>
+                    <span className="text-xs font-mono font-medium text-neutral-500">+AED 4.00</span>
                     <input
                       id="extra-shots-checkbox"
                       type="checkbox"
@@ -249,7 +249,7 @@ export default function CoffeeSelectorModal({ item, onClose, onAddToCart }: Coff
                 Brew Price
               </span>
               <span className="text-2xl font-mono font-bold text-neutral-900">
-                ${currentTotal.toFixed(2)}
+                AED {currentTotal.toFixed(2)}
               </span>
             </div>
             

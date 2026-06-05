@@ -126,9 +126,9 @@ export default function MenuSection({ onSelectItem }: MenuSectionProps) {
                   )}
                 </div>
 
-                <div className="absolute top-4 right-4">
-                  <span className="px-3 py-1 bg-neutral-900/90 backdrop-blur-md text-white font-mono text-sm font-bold rounded-lg border border-neutral-800 shadow-sm">
-                    ${item.price.toFixed(2)}
+                <div className="absolute top-4 right-4 animate-fade-in">
+                  <span className="px-3 py-1.5 bg-neutral-900/90 backdrop-blur-md text-white font-mono text-xs font-bold rounded-lg border border-neutral-800 shadow-sm">
+                    AED {item.price.toFixed(2)}
                   </span>
                 </div>
               </div>
