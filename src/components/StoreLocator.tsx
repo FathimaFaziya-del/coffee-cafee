@@ -95,9 +95,9 @@ export default function StoreLocator() {
   // Filter criteria options
   const filterFacilities = [
     { id: 'all', label: 'All Locations' },
-    { id: 'Nitro Taps', label: 'Nitro Infusions' },
-    { id: 'Pour Over Slow Bar', label: 'Manual Slow Bars' },
-    { id: 'Live Roasting Demos', label: 'Active Roaster HQ' },
+    { id: 'Nitro', label: 'Nitro Infusions' },
+    { id: 'Slow Bar', label: 'Manual Slow Bars' },
+    { id: 'Roasting', label: 'Active Roaster HQ' },
   ];
 
   const filteredStores = useMemo(() => {
