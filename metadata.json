@@ -1,0 +1,8 @@
+{
+  "name": "coffee-website",
+  "description": "An elegant artisan coffee shop website with slow brews and a store locator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
