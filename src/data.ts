@@ -5,13 +5,17 @@
 
 import { MenuItem, StoreLocation, Voucher } from './types';
 
-// Let's import the specific images we generated so they list correctly
-// and reference them in our menu items.
+// Import our generated assets as ES Modules so Vite bundles and hashes them correctly in production
+import coffeeHero from './assets/images/coffee_hero_1780680391059.png';
+import espressoDrink from './assets/images/espresso_drink_1780680410315.png';
+import coffeeBeans from './assets/images/coffee_beans_1780680427052.png';
+import coffeePour from './assets/images/coffee_pour_1780680443701.png';
+
 export const IMAGES = {
-  hero: '/src/assets/images/coffee_hero_1780680391059.png',
-  drink: '/src/assets/images/espresso_drink_1780680410315.png',
-  beans: '/src/assets/images/coffee_beans_1780680427052.png',
-  pour: '/src/assets/images/coffee_pour_1780680443701.png'
+  hero: coffeeHero,
+  drink: espressoDrink,
+  beans: coffeeBeans,
+  pour: coffeePour
 };
 
 export const MENU_ITEMS: MenuItem[] = [
