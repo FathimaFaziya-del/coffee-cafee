@@ -69,6 +69,7 @@ export default function StoreLocator() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'real' | 'vector'>('real');
   const [activeInfoWindowId, setActiveInfoWindowId] = useState<string | null>(STORE_LOCATIONS[0].id);
+  const [showSetupGuide, setShowSetupGuide] = useState<boolean>(false);
 
   // Sync selectedStore with activeInfoWindowId
   useEffect(() => {
@@ -274,38 +275,21 @@ export default function StoreLocator() {
             {/* Render appropriate map mode */}
             {viewMode === 'real' ? (
               !hasValidKey ? (
-                /* Google Maps API Key Key Setup - Constitution C */
-                <div className="absolute inset-0 bg-neutral-900 text-white p-6 flex items-center justify-center">
-                  <div className="max-w-md w-full space-y-4 text-center">
-                    <MapPin className="w-10 h-10 text-amber-500 mx-auto animate-bounce shrink-0" />
-                    <h3 className="text-lg font-serif font-semibold text-white">Google Maps Interactive Access</h3>
-                    <p className="text-xs text-neutral-400 font-sans leading-relaxed">
-                      To activate the fully functional live Google Map indicating actual UAE landmarks, real locations, and turn-by-turn navigation:
-                    </p>
-                    <div className="bg-neutral-950 rounded-xl p-4 text-left border border-neutral-800 space-y-2 text-[10px] font-mono text-neutral-300">
-                      <p><strong>Step 1:</strong> Get a key from the Google Maps Console:</p>
-                      <p className="pl-3 text-[#d8be9a] overflow-x-auto select-all whitespace-nowrap scrollbar-none">
-                        https://console.cloud.google.com/google/maps-apis/start?utm_campaign=gmp-code-assist-ais
-                      </p>
-                      <p className="mt-2"><strong>Step 2:</strong> Paste your API key as a secret in AI Studio:</p>
-                      <ul className="list-disc list-inside pl-3 space-y-1 text-neutral-450">
-                        <li>Click <strong>Settings</strong> (⚙️ gear icon, top-right)</li>
-                        <li>Select <strong>Secrets</strong></li>
-                        <li>Add secret with name <code className="text-amber-300 font-bold select-all">GOOGLE_MAPS_PLATFORM_KEY</code></li>
-                        <li>Type your paste value and hit Enter</li>
-                      </ul>
-                    </div>
-                    <div className="pt-1">
-                      <a 
-                        href="https://console.cloud.google.com/google/maps-apis/start?utm_campaign=gmp-code-assist-ais" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#8c6239] hover:bg-[#a17243] text-white rounded-xl text-xs font-serif font-medium tracking-wide transition-all"
-                      >
-                        <Compass className="w-3.5 h-3.5" />
-                        Get Google Maps API Key
-                      </a>
-                    </div>
+                /* Fully Functional, Beautiful, Live Google Maps Embed with no setup barriers! */
+                <div className="w-full h-full relative" id="google-fallback-embed-container">
+                  <iframe
+                    title="Google Maps Location"
+                    src={`https://maps.google.com/maps?q=${selectedStore.coordinates.lat},${selectedStore.coordinates.lng}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                    className="w-full h-full border-0 absolute inset-0"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                  
+                  {/* Styled overlay with quick Info details */}
+                  <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-md border border-neutral-200/80 px-3.5 py-1.5 rounded-full shadow-md text-[10px] font-sans">
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="font-bold text-neutral-800 uppercase tracking-wide">Live Interactive Map</span>
                   </div>
                 </div>
               ) : (
